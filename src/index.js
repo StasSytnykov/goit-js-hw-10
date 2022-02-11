@@ -10,30 +10,47 @@ const countryInfo = document.querySelector('.country-info');
 searchInput.addEventListener('input', _.debounce(findCountries, DEBOUNCE_DELAY));
 
 function findCountries(event) {
-  const countryName = event.target.value;
+  if (event.target.value === ' ') {
+    return;
+  }
+  const countryName = event.target.value.trim();
   console.log(countryName);
-  fetchCountries(countryName).then(data => {
-    renderCountries(data);
-  });
+  fetchCountries(countryName).then(renderCountries).catch(showErrors);
 }
+
+const showErrors = () => {
+  console.log('Oops, there is no country with that name');
+  countryInfo.innerHTML = '';
+  countryList.innerHTML = '';
+};
 
 const renderCountries = data => {
   console.log(data);
-  const markupCountryList = data.map(createMarkupCountryList).join('');
-  const markupCountryInfo = createMarkupCountryInfo(data);
-  console.log(markupCountryList);
+  if (data.length >= 2 && data.length <= 10) {
+    const markupCountryList = data.map(createMarkupCountryList).join('');
+    countryInfo.innerHTML = '';
+    countryList.innerHTML = markupCountryList;
+    return;
+  }
+  if (data.length < 2) {
+    const markupCountryInfo = data.map(createMarkupCountryInfo).join('');
+    countryList.innerHTML = '';
+    countryInfo.innerHTML = markupCountryInfo;
+    return;
+  }
 
-  countryList.innerHTML = markupCountryList;
-  countryInfo.innerHTML = markupCountryInfo;
+  if (data.length > 10) {
+    console.log('Too many matches found. Please enter a more specific name.');
+  }
 };
 
 const createMarkupCountryList = ({ name, flags }) => {
-  return `<li><p><img src=${flags.svg} width=50px> ${name}</p></li>`;
+  return `<li><p><img src=${flags.svg} width=30px> ${name.official}</p></li>`;
 };
 
 const createMarkupCountryInfo = ({ name, capital, population, flags, languages }) => {
   return `
-    <h2><img src=${flags}> ${name}</h2>
+    <h2><img src=${flags.svg} width=30px> ${name.official}</h2>
     <p>Capital: ${capital}</p>
     <p>Population: ${population}</p>
     <p>Languages: ${languages}</p>
