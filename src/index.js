@@ -1,3 +1,4 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 var _ = require('lodash');
 import './css/styles.css';
 import { fetchCountries } from './fetchCountries';
@@ -19,7 +20,7 @@ function findCountries(event) {
 }
 
 const showErrors = () => {
-  console.log('Oops, there is no country with that name');
+  Notify.failure('Oops, there is no country with that name');
   countryInfo.innerHTML = '';
   countryList.innerHTML = '';
 };
@@ -40,7 +41,7 @@ const renderCountries = data => {
   }
 
   if (data.length > 10) {
-    console.log('Too many matches found. Please enter a more specific name.');
+    Notify.info('Too many matches found. Please enter a more specific name.');
   }
 };
 
