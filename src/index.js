@@ -52,8 +52,8 @@ const createMarkupCountryList = ({ name, flags }) => {
 const createMarkupCountryInfo = ({ name, capital, population, flags, languages }) => {
   return `
     <h2><img src=${flags.svg} width=30px> ${name.official}</h2>
-    <p>Capital: ${capital}</p>
-    <p>Population: ${population}</p>
-    <p>Languages: ${languages}</p>
+    <p class=country-info__text>Capital: ${capital}</p>
+    <p class=country-info__text>Population: ${population}</p>
+    <p class=country-info__text>Languages: ${languages}</p>
   `;
 };
