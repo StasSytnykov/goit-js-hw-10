@@ -1,3 +1,5 @@
+import markupCountryListTemplate from './hbs-templates/markup-country-list.hbs';
+import markupCountryInfoTemplate from './hbs-templates/markup-country-info.hbs';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 var _ = require('lodash');
 import './css/styles.css';
@@ -15,7 +17,7 @@ function findCountries(event) {
     return;
   }
   const countryName = event.target.value.trim();
-  console.log(countryName);
+  
   fetchCountries(countryName).then(renderCountries).catch(showErrors);
 }
 
@@ -26,34 +28,19 @@ const showErrors = () => {
 };
 
 const renderCountries = data => {
-  console.log(data);
   if (data.length >= 2 && data.length <= 10) {
-    const markupCountryList = data.map(createMarkupCountryList).join('');
     countryInfo.innerHTML = '';
-    countryList.innerHTML = markupCountryList;
+    countryList.innerHTML = markupCountryListTemplate(data);
     return;
   }
+
   if (data.length < 2) {
-    const markupCountryInfo = data.map(createMarkupCountryInfo).join('');
     countryList.innerHTML = '';
-    countryInfo.innerHTML = markupCountryInfo;
+    countryInfo.innerHTML = markupCountryInfoTemplate(data);
     return;
   }
 
   if (data.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.');
   }
-};
-
-const createMarkupCountryList = ({ name, flags }) => {
-  return `<li><p><img src=${flags.svg} width=30px> ${name.official}</p></li>`;
-};
-
-const createMarkupCountryInfo = ({ name, capital, population, flags, languages }) => {
-  return `
-    <h2><img src=${flags.svg} width=30px> ${name.official}</h2>
-    <p class=country-info__text>Capital: ${capital}</p>
-    <p class=country-info__text>Population: ${population}</p>
-    <p class=country-info__text>Languages: ${languages}</p>
-  `;
 };
