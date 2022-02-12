@@ -13,11 +13,12 @@ const countryInfo = document.querySelector('.country-info');
 searchInput.addEventListener('input', _.debounce(findCountries, DEBOUNCE_DELAY));
 
 function findCountries(event) {
-  if (event.target.value === ' ') {
+  if (event.target.value === ' ' || event.target.value === '') {
     return;
   }
-  const countryName = event.target.value.trim();
   
+  const countryName = event.target.value.trim();
+
   fetchCountries(countryName).then(renderCountries).catch(showErrors);
 }
 
@@ -42,5 +43,7 @@ const renderCountries = data => {
 
   if (data.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.');
+    countryInfo.innerHTML = '';
+    countryList.innerHTML = '';
   }
 };
