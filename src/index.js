@@ -14,9 +14,11 @@ searchInput.addEventListener('input', _.debounce(findCountries, DEBOUNCE_DELAY))
 
 function findCountries(event) {
   if (event.target.value === ' ' || event.target.value === '') {
+    countryInfo.innerHTML = '';
+    countryList.innerHTML = '';
     return;
   }
-  
+
   const countryName = event.target.value.trim();
 
   fetchCountries(countryName).then(renderCountries).catch(showErrors);
